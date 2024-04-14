@@ -15,7 +15,7 @@ export default function LeftSidebar() {
       flex-col justify-between overflow-y-auto border-r
       p-6 pt-36 shadow-light-300 dark:shadow-none
       max-sm:hidden lg:w-[266px] custom-scrollbar">
-      <div className="flex flex-1 flex-col gap-3 ">
+      <div className="flex flex-1 flex-col gap-3">
         {sidebarLinks.map((item) => {
           const isActive =
             (pathname.includes(item.route) && item.route.length > 1) ||
