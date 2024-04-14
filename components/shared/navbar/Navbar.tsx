@@ -1,6 +1,9 @@
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import Theme from "../Theme";
+import MobileNavbar from "./MobileNavbar";
+import GlobalSearch from "../search/GlobalSearch";
 
 export default function Navbar() {
   return (
@@ -12,13 +15,13 @@ export default function Navbar() {
           height={23}
           alt="DevFlow"
         />
-        <p className="h2-bold font-spaceGrotesk text-dark-100 dark:text-light-900 max-sm:hidden">
+        <p className="h2-bold ml-2 text-dark100_light900 font-mono max-sm:hidden">
           Dev<span className="text-primary-500">Flow</span>
         </p>
       </Link>
-      GlobalSearch
+      <GlobalSearch />
       <div className="flex-between gap-5">
-        Theme
+        <Theme/>
         <SignedIn>
           <UserButton
             afterSignOutUrl="/"
@@ -30,8 +33,9 @@ export default function Navbar() {
                 colorPrimary: "#ff7000"
               }
             }}
-          />
+          />  
         </SignedIn>
+        <MobileNavbar />
       </div>
     </nav>
   );
