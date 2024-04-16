@@ -22,7 +22,7 @@ export default function Navbar() {
       <GlobalSearch />
       <div className="flex-between gap-5">
         <Theme/>
-        <SignedIn>
+        {<SignedIn>
           <UserButton
             afterSignOutUrl="/"
             appearance={{
@@ -34,7 +34,7 @@ export default function Navbar() {
               }
             }}
           />  
-        </SignedIn>
+        </SignedIn>}
         <MobileNavbar />
       </div>
     </nav>
