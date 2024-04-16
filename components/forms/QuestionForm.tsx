@@ -47,7 +47,12 @@ export default function QuestionForm() {
 
     try {
       // making a async call to api for create a question
-      await createQuestion({});
+      await createQuestion({
+        title: values.title,
+        content: values.explanation,
+        tags: tags,
+        //author: 
+      });
       // contain all form data
       // navigate to home
     } catch(error) {
