@@ -20,6 +20,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useTheme } from "@/context/ThemeProvider";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
+import { createQuestion } from "@/lib/actions/question.action";
 
 export default function QuestionForm() {
   const editorRef = useRef(null);
@@ -37,7 +38,7 @@ export default function QuestionForm() {
   const type: any = 'post'
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function onSubmit(values: z.infer<typeof questionSchema>) {
+  async function onSubmit(values: z.infer<typeof questionSchema>) {
     if (tags.length < 1) {
       setTagError("Add one tag at least");
     }
@@ -46,6 +47,7 @@ export default function QuestionForm() {
 
     try {
       // making a async call to api for create a question
+      await createQuestion({});
       // contain all form data
       // navigate to home
     } catch(error) {
