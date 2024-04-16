@@ -21,8 +21,17 @@ import { useTheme } from "@/context/ThemeProvider";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion } from "@/lib/actions/question.action";
+import { useRouter, usePathname} from "next/navigation";
 
-export default function QuestionForm() {
+interface Props{
+  mongoUserId: string;
+}
+
+export default function QuestionForm({mongoUserId}: Props) {
+  
+  const router = useRouter();
+  const pathname = usePathname()
+
   const editorRef = useRef(null);
   const { mode } = useTheme();
   const [tags, setTags] = useState([]);
@@ -43,7 +52,6 @@ export default function QuestionForm() {
       setTagError("Add one tag at least");
     }
     setIsSubmitting(true);
-    console.log(values);
 
     try {
       // making a async call to api for create a question
@@ -51,12 +59,14 @@ export default function QuestionForm() {
         title: values.title,
         content: values.explanation,
         tags: tags,
-        //author: 
+        author: JSON.parse(mongoUserId)
       });
       // contain all form data
+      
       // navigate to home
+      router.push('/')
     } catch(error) {
-        console.log(error)
+        console.log("Creating question failed..")
     } finally {
       setIsSubmitting(false);
     }
@@ -71,14 +81,12 @@ export default function QuestionForm() {
 
       if (tagValue !== "") {
         if (tags.length < 3){
-          console.log("tagValue:", tagValue.length);
           if (tagValue.length > 20) {
             setTagError("Tag must be less then 13 characters.");
           } else if (!tags.includes(tagValue as never)) {
             setTags([tagValue as never, ...tags]);
             tagInput.value = "";
             setTagError("");
-            console.log(tags);
           }
         } else {
           setTagError("3 Tags at Maximum")

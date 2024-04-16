@@ -16,6 +16,8 @@ export async function createQuestion(params: any) {
       content,
       author,
     });
+
+    console.log("question created title:", title);
     const tagDocuments = [];
     // create a tags or get them if they already exist
     for (const tag of tags) {
@@ -30,6 +32,7 @@ export async function createQuestion(params: any) {
     await Question.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
     });
-    
-  } catch (error) {}
+  } catch (error) {
+    console.log("question didn't created")
+  }
 }
