@@ -6,8 +6,10 @@ import { HomePageFilters } from "@/constants/filters";
 import Link from "next/link";
 import NoResult from "@/components/shared/NoResult";
 import QuestionCard from "@/components/card/QuestionCard";
+import { getQuestions } from "@/lib/actions/question.action";
 
-const questions = [
+// dommy question
+const dommyQuestions = [
   {
     _id: 1,
     title: "How do I create a responsive design with CSS grid?",
@@ -140,10 +142,14 @@ const questions = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+
+  // ______________getting question from the mongo database___________________
+  const result = await getQuestions({})
+  console.log("Home page (Server)| get's question/s");
+  //__________________________________________________________________________
   return (
     <>
-      {" "}
       {/*  HEADER: ALL QUESTION              +                BUTTON */}
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
@@ -172,8 +178,8 @@ export default function Home() {
       <HomeFilters />
       {/* LOOPING THROGH QUESTION LIST */}
       <div className="mt-10 flex w-full flex-col gap-6">
-        {questions.length > 0 ? (
-          questions.map((question) => (
+        {result && result.questions && result.questions.length > 0 ? (
+          result.questions.map((question) => (
             <QuestionCard
               key={question._id}
               _id={question._id}

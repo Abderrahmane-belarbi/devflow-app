@@ -21,16 +21,15 @@ import { useTheme } from "@/context/ThemeProvider";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion } from "@/lib/actions/question.action";
-import { useRouter, usePathname} from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
-interface Props{
+interface Props {
   mongoUserId: string;
 }
 
-export default function QuestionForm({mongoUserId}: Props) {
-  
+export default function QuestionForm({ mongoUserId }: Props) {
   const router = useRouter();
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const editorRef = useRef(null);
   const { mode } = useTheme();
@@ -44,31 +43,33 @@ export default function QuestionForm({mongoUserId}: Props) {
       tags: [],
     },
   });
-  const type: any = 'post'
+  const type: any = "post";
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function onSubmit(values: z.infer<typeof questionSchema>) {
     if (tags.length < 1) {
       setTagError("Add one tag at least");
-    }
-    setIsSubmitting(true);
+    } else if (values.title.length > 5 && values.explanation.length > 10) {
+      setIsSubmitting(true);
 
-    try {
-      // making a async call to api for create a question
-      await createQuestion({
-        title: values.title,
-        content: values.explanation,
-        tags: tags,
-        author: JSON.parse(mongoUserId)
-      });
-      // contain all form data
-      
-      // navigate to home
-      router.push('/')
-    } catch(error) {
-        console.log("Creating question failed..")
-    } finally {
-      setIsSubmitting(false);
+      try {
+        // making a async call to api for create a question
+        await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: tags,
+          author: JSON.parse(mongoUserId),
+          path: pathname
+        });
+        // contain all form data
+
+        // navigate to home
+        router.push("/");
+      } catch (error) {
+        console.log("Creating question failed..");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   }
 
@@ -80,7 +81,7 @@ export default function QuestionForm({mongoUserId}: Props) {
       const tagValue = tagInput.value.trim();
 
       if (tagValue !== "") {
-        if (tags.length < 3){
+        if (tags.length < 3) {
           if (tagValue.length > 20) {
             setTagError("Tag must be less then 13 characters.");
           } else if (!tags.includes(tagValue as never)) {
@@ -89,7 +90,7 @@ export default function QuestionForm({mongoUserId}: Props) {
             setTagError("");
           }
         } else {
-          setTagError("3 Tags at Maximum")
+          setTagError("3 Tags at Maximum");
         }
       }
     } else {
@@ -97,19 +98,18 @@ export default function QuestionForm({mongoUserId}: Props) {
     }
   }
 
-
-  function handleOnDeleteTag(wantedToDeleteTag:string){
+  function handleOnDeleteTag(wantedToDeleteTag: string) {
     const tempTags = tags;
     tags.map((currentTag) => {
-      if(currentTag === wantedToDeleteTag){
-        const index = tags.indexOf(currentTag)
-        tempTags.splice(index,1);
-        setTags([...tempTags])
-        if(tags.length < 3){
+      if (currentTag === wantedToDeleteTag) {
+        const index = tags.indexOf(currentTag);
+        tempTags.splice(index, 1);
+        setTags([...tempTags]);
+        if (tags.length < 3) {
           setTagError("");
         }
       }
-    })
+    });
   }
 
   return (
@@ -230,22 +230,19 @@ export default function QuestionForm({mongoUserId}: Props) {
             Add up to 3 tags to describe what your question is about. You need
             to press enter to add a tag.
           </p>
-          
         </div>
         <Button
           type="submit"
           className="primary-gradient w-fit !text-light-900"
           disabled={isSubmitting}
-          onClick={() => {onSubmit( form.getValues())}}
+          onClick={() => {
+            onSubmit(form.getValues());
+          }}
         >
           {isSubmitting ? (
-            <>
-              {type === 'edit' ? 'Editing...' : 'Posting...'}  
-            </>
+            <>{type === "edit" ? "Editing..." : "Posting..."}</>
           ) : (
-            <>
-              {type === 'edit' ? 'Edit Question' : 'Ask a Question'}
-            </>
+            <>{type === "edit" ? "Edit Question" : "Ask a Question"}</>
           )}
         </Button>
       </form>
