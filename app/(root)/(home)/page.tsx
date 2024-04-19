@@ -146,7 +146,6 @@ export default async function Home() {
 
   // ______________getting question from the mongo database___________________
   const result = await getQuestions({})
-  console.log("Home page (Server)| get's question/s");
   //__________________________________________________________________________
   return (
     <>

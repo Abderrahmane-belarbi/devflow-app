@@ -15,10 +15,10 @@ export async function getQuestions(params: GetQuestionsParams){
     .populate({path: 'tags', model: Tag})
     .populate({path: 'author', model: User})
     .sort({createdAt: -1}) // sorting from the new to old base on the time | 1 measn from old to new
-    console.log(`The Server (action) get's ${questions.length} question/s`)
+    console.log(`THE SERVER GET'S ${questions.length} QUESTION/s`)
     return {questions};
   } catch (error) {
-    console.log("getting question from mongodb operation failed");
+    console.log("GETTING QUESTION FROM MONGO_DB FAILED.");
   }
 }
 
@@ -36,7 +36,7 @@ export async function createQuestion(params: CreateQuestionParams) {
       author
     });
 
-    console.log("question created... | title:", title);
+    console.log("QUESTION CREATED... | TITLE:", title);
     const tagDocuments = [];
     // create a tags or get them if they already exist
     for (const tag of tags) {
@@ -56,6 +56,6 @@ export async function createQuestion(params: CreateQuestionParams) {
       $push: { tags: { $each: tagDocuments } },
     });
   } catch (error) {
-    console.log("question didn't created")
+    console.log("----------- QUESTION NOT CREATED ----------")
   }
 }
