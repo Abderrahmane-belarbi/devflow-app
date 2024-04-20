@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 
 export async function getUserById(params:any) {
     try {
-        connectToDatabase();
+        await connectToDatabase();
         const {userId} = params;
 
         const user = await User.findOne({clerkId: userId});
@@ -22,7 +22,7 @@ export async function getUserById(params:any) {
 
 export async function createUser(userData: CreateUserParams) {
     try {
-      connectToDatabase();
+      await connectToDatabase();
       const newUser = await User.create(userData);
       return newUser;
     } catch (error) {
@@ -33,7 +33,7 @@ export async function createUser(userData: CreateUserParams) {
   
   export async function updateUser(params: UpdateUserParams) {
     try {
-      connectToDatabase();
+      await connectToDatabase();
       const { clerkId, updateData, path } = params;
       await User.findOneAndUpdate({ clerkId }, updateData, {
         new: true,
@@ -47,7 +47,7 @@ export async function createUser(userData: CreateUserParams) {
   
   export async function deleteUser(params: DeleteUserParams) {
     try {
-      connectToDatabase();
+      await connectToDatabase();
       const { clerkId } = params;
       const user = await User.findOneAndDelete({ clerkId });
       if (!user) {
