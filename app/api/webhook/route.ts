@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
@@ -12,6 +11,8 @@ export async function POST(req: Request) {
     throw new Error(
       "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
     );
+  } else {
+    console.log('CLERK_WEBHOOK_SECRET FOUND');
   }
 
   // Get the headers
