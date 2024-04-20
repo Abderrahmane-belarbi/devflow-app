@@ -4,6 +4,7 @@ export default authMiddleware({
   publicRoutes: [
     "/",
     "/api/webhook",
+    "/ask-question",
     "/question/:id",
     "/tags",
     "/tags/:id",
@@ -11,7 +12,12 @@ export default authMiddleware({
     "/community",
     "/jobs",
   ],
-  //ignoredRoutes: ["/api/webhook", "/api/chatgpt"],
+  ignoredRoutes: [
+    "/api/webhook",
+    "/api/chatgpt",
+    "/ask-question",
+    "/((?!api|trpc))(_next.*|.+\.[\w]+$)"
+  ],
 });
 
 export const config = {
