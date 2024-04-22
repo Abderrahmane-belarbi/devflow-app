@@ -58,7 +58,7 @@ export default function QuestionCard({
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
         {/* Author information (Picture and name) */}
         <Metric
-          icon="/assets/icons/avatar.svg"
+          icon={author.picture}
           alt="user"
           value={author.name}
           title={` • asked ${getTimestamp(createdAt)}`}
