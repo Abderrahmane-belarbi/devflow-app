@@ -3,7 +3,7 @@
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
 import Question from "@/database/question.model";
-import { CreateUserParams, DeleteUserParams, UpdateUserParams } from "./shared.types";
+import { CreateUserParams, DeleteUserParams, GetAllUsersParams, UpdateUserParams } from "./shared.types";
 import { revalidatePath } from "next/cache";
 
 export async function getUserById(params:any) {
@@ -70,3 +70,27 @@ export async function createUser(userData: CreateUserParams) {
       throw error;
     }
   }
+
+  export async function getAllUsers(params: GetAllUsersParams){
+    try {
+      connectToDatabase();
+
+      //const {page=1, pageSize=20, filter, searchQuery } = params;
+      const users = await User.find({})
+        .sort({createdAt: -1})
+      return {users}
+
+    } catch (error) {
+      console.log("COULD'N GET USERS");
+      throw error;
+    }
+  }
+/*   export async function getAllUsers(params: GetAllUsersParams){
+    try {
+      connectToDatabase();
+
+    } catch (error) {
+      console.log("COULD'N GET USERS");
+      throw error;
+    }
+  } */

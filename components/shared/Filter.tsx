@@ -34,9 +34,9 @@ export default function Filter({
           </div>
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup>
+          <SelectGroup className="bg-light-900 dark:bg-dark-200">
             {filters.map((filter) => (
-              <SelectItem key={filter.value} value={filter.value}>
+              <SelectItem key={filter.value} value={filter.value} className="text-dark100_light900 dark:bg-dark-200 focus:dark:bg-dark-400 dark:hover:bg-dark-400 hover:bg-light-800  focus:bg-light-800">
                 {filter.name}
               </SelectItem>
             ))}
