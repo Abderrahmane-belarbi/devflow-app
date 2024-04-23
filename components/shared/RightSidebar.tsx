@@ -36,13 +36,13 @@ export default function RightSidebar() {
     },
   ];
   const popularTags = [
-    {_id: 1, name: 'HTML', totalQuestions: 10},
-    {_id: 2, name: 'Python', totalQuestions: 15},
-    {_id: 3, name: 'CSS', totalQuestions: 8},
-    {_id: 4, name: 'Java', totalQuestions: 12},
-    {_id: 5, name: 'C++', totalQuestions: 9},
-    {_id: 6, name: 'JavaScript', totalQuestions: 20},
-    {_id: 7, name: 'SQL', totalQuestions: 14},
+    {_id: '1', name: 'HTML', totalQuestions: 10},
+    {_id: '2', name: 'Python', totalQuestions: 15},
+    {_id: '3', name: 'CSS', totalQuestions: 8},
+    {_id: '4', name: 'Java', totalQuestions: 12},
+    {_id: '5', name: 'C++', totalQuestions: 9},
+    {_id: '6', name: 'JavaScript', totalQuestions: 20},
+    {_id: '7', name: 'SQL', totalQuestions: 14},
   ]
   return (
     <section
