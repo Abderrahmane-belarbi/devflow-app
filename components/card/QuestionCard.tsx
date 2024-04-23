@@ -7,7 +7,7 @@ interface Props {
   _id: number;
   title: string;
   tags?: {
-    _id: number;
+    _id: string;
     name: string;
   }[];
   author: {
