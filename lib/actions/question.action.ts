@@ -19,6 +19,7 @@ export async function getQuestions(params: GetQuestionsParams){
     return {questions};
   } catch (error) {
     console.log("GETTING QUESTION FROM MONGO_DB FAILED.");
+    throw error;
   }
 }
 
