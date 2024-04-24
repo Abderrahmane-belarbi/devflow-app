@@ -3,27 +3,10 @@
 import Question from "@/database/question.model";
 import { connectToDatabase } from "../mongoose";
 import Tag from "@/database/tag.model";
-import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
+import { CreateQuestionParams, GetQuestionByIdParams, GetQuestionsParams } from "./shared.types";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 
-export async function getQuestions(params: GetQuestionsParams){
-  try {
-    await connectToDatabase();
-
-    const questions = await Question.find({})
-    .populate({path: 'tags', model: Tag})
-    .populate({path: 'author', model: User})
-    .sort({createdAt: -1}) // sorting from the new to old base on the time | 1 measn from old to new
-    console.log(`THE SERVER GET'S ${questions.length} QUESTION/s`)
-    return {questions};
-  } catch (error) {
-    console.log('---------------------------------------------')
-    console.log("GETTING___QUESTION___FROM___MONGO_DB___FAILED.");
-    console.log('---------------------------------------------')
-    throw error;
-  }
-}
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {
@@ -60,5 +43,44 @@ export async function createQuestion(params: CreateQuestionParams) {
     });
   } catch (error) {
     console.log("----------- QUESTION NOT CREATED ----------")
+  }
+}
+
+export async function getQuestions(params: GetQuestionsParams){
+  try {
+    await connectToDatabase();
+
+    const questions = await Question.find({})
+    .populate({path: 'tags', model: Tag})
+    .populate({path: 'author', model: User})
+    .sort({createdAt: -1}) // sorting from the new to old base on the time | 1 measn from old to new
+    console.log(`THE SERVER GET'S ${questions.length} QUESTION/s`)
+    return {questions};
+  } catch (error) {
+    console.log('---------------------------------------------')
+    console.log("GETTING___QUESTION___FROM___MONGO_DB___FAILED.");
+    console.log('---------------------------------------------')
+    throw error;
+  }
+}
+
+
+export async function getQuestionById(params: GetQuestionByIdParams){
+  try {
+    // connecting to database
+    connectToDatabase();
+
+    const {questionId} = params;
+    const question = await Question.findById(questionId)
+      .populate({path: 'tags', model: Tag, select: '_id name'})
+      .populate({path: 'author', model: User, select: '_id clerkId name picture'})
+
+    return question;
+
+  } catch (error) {
+    console.log('--------------------------------------')
+    console.log("COULDN'T___FIND___QUESTION___BY___ID")
+    console.log('--------------------------------------')
+    throw error;
   }
 }

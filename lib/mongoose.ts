@@ -15,6 +15,10 @@ export async function connectToDatabase (){
         })
         isConnected = true;
         console.log("MONGO_DB CONNECTED.");
+
+        require('@/database/question.model')
+        require('@/database/tag.model')
+        require('@/database/user.model')
     } catch (error) {
         console.log('------------------------------------')
         console.log("FAILE___TO___CONNECT___TO___DATABASE")
