@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 
 export async function getQuestions(params: GetQuestionsParams){
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const questions = await Question.find({})
     .populate({path: 'tags', model: Tag})
@@ -18,14 +18,17 @@ export async function getQuestions(params: GetQuestionsParams){
     console.log(`THE SERVER GET'S ${questions.length} QUESTION/s`)
     return {questions};
   } catch (error) {
-    console.log("GETTING QUESTION FROM MONGO_DB FAILED.");
+    console.log('---------------------------------------------')
+    console.log("GETTING___QUESTION___FROM___MONGO_DB___FAILED.");
+    console.log('---------------------------------------------')
+    throw error;
   }
 }
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {
     // connect to DB
-    connectToDatabase();
+    await connectToDatabase();
 
     const { title, content, tags, author, path } = params;
 

@@ -16,6 +16,9 @@ export async function connectToDatabase (){
         isConnected = true;
         console.log("MONGO_DB CONNECTED.");
     } catch (error) {
+        console.log('------------------------------------')
         console.log("FAILE___TO___CONNECT___TO___DATABASE")
+        console.log('------------------------------------')
+        throw error;
     }
 }
