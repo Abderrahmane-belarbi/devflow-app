@@ -1,5 +1,5 @@
 import ParseHTML from '@/components/ParseHTML';
-import Answer from '@/components/forms/Answer';
+import AnswerForm from '@/components/forms/AnswerForm';
 import Metric from '@/components/shared/Metric';
 import RenderTag from '@/components/shared/RenderTag';
 import { getQuestionById } from '@/lib/actions/question.action';
@@ -75,7 +75,7 @@ export default async function Page ({ params, searchParams }: any) {
         ))}
       </div>
 
-      <Answer />
+      <AnswerForm />
 
     </>
   )
