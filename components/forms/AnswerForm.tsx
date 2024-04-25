@@ -1,6 +1,5 @@
 "use client";
 
-import { CreateAnswerParams } from "@/lib/actions/shared.types";
 import { AnswerSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, useForm } from "react-hook-form";
@@ -35,7 +34,7 @@ export default function AnswerForm() {
 
   return (
     <div>
-      <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2 mt-6">
+      {/* <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2 mt-6">
         <h4 className="paragraph-semibold">
           Write your answer here
         </h4>
@@ -53,11 +52,11 @@ export default function AnswerForm() {
           />
           Generate an AI Answer
         </Button>
-      </div>
+      </div> */}
     <Form {...form}>
       <form
         className="mt-6 w-full flex flex-col gap-10"
-        onSubmit={form.handleSubmit(handleCreateAnswer)}
+        //onSubmit={form.handleSubmit(handleCreateAnswer)}
       >
         <FormField
           control={form.control}
@@ -107,7 +106,7 @@ export default function AnswerForm() {
             </FormItem>
           )}
         />
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <Button
             type="button"
             className="primary-gradient w-fit text-white"
@@ -115,7 +114,7 @@ export default function AnswerForm() {
           >
             {isSubmitting ? 'Submitting...' : 'Submit'}
           </Button>
-        </div>
+        </div> */}
       </form>
     </Form>
     </div>
