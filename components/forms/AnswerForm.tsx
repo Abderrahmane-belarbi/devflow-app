@@ -19,7 +19,7 @@ interface Props {
   authorId: string;
 }
 
-export default function AnswerForm () {
+export default function AnswerForm ({ question, questionId, authorId }: Props) {
   const pathname = usePathname();
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { mode } = useTheme();
@@ -31,7 +31,32 @@ export default function AnswerForm () {
     }
   })
 
-  function handleCreateAnswer (values: z.infer<typeof AnswerSchema>){}
+  async function handleCreateAnswer (values: z.infer<typeof AnswerSchema>){
+    setIsSubmitting(true);
+    try {
+      await createAnswer({
+        content: values.answer,
+        author: JSON.parse(authorId),
+        question: JSON.parse(questionId),
+        path: pathname
+      })
+
+      form.reset();
+
+      if(editorRef.current){
+        const editor = editorRef.current as any;
+        editor.setContent('');
+      }
+
+    } catch (error) {
+      console.log("---------------------------")
+      console.log("CREATING___QUESTION___FAILED")
+      console.log("----------------------------")
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
 
   return (
