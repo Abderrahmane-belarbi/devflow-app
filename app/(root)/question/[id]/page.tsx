@@ -46,9 +46,9 @@ export default async function Page ({ params, searchParams }: any) {
               itemId={JSON.stringify(result._id)}
               userId={JSON.stringify(mongoUser._id)}
               upvotes={result.upvotes.length}
-              hasUpvoted={result.upvotes.includes(mongoUser._id)}
-              downvotes={result.upvotes.length}
-              hasDownvoted={result.downvotes.includes(mongoUser._id)}
+              hasAlreadyUpvoted={result.upvotes.includes(mongoUser._id)}
+              downvotes={result.downvotes.length}
+              hasAlreadyDownvoted={result.downvotes.includes(mongoUser._id)}
               hasSaved={mongoUser?.saved.includes(result._id)}
             />
           </div>
@@ -98,7 +98,7 @@ export default async function Page ({ params, searchParams }: any) {
 
       <AllAnswers
         questionId={result._id}
-        userId={JSON.stringify(mongoUser._id)}
+        userId={mongoUser._id}
         totalAnswers={result.answers.length}
       />
 

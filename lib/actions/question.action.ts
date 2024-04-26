@@ -95,18 +95,66 @@ export async function upvoteQuestion(params: QuestionVoteParams){
     let updateQuery = {};
 
     if (hasAlreadyUpvoted) {
-      
+      updateQuery = { $pull: { upvotes: userId } }
+    } else if (hasAlreadyDownvoted) {
+      updateQuery = {
+        $pull: { downvotes: userId },
+        $push: { upvotes: userId }
+      }
+    } else {
+      updateQuery = { $addToSet: { upvotes: userId } }
     }
-    const question = await Question.findById(questionId)
-      .populate({path: 'tags', model: Tag, select: '_id name'})
-      .populate({path: 'author', model: User, select: '_id clerkId name picture'})
 
-    return question;
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, { new: true });
+    if (!question) {
+      throw new Error('Question not found')
+    }
+
+    // increment author's reputation by +score
+
+    revalidatePath(path)
 
   } catch (error) {
-    console.log('--------------------------------------')
-    console.log("COULDN'T___FIND___QUESTION___BY___ID")
-    console.log('--------------------------------------')
+    console.log('---------------------------')
+    console.log("UPVOTE___OPERATION___FAILED")
+    console.log('---------------------------')
+    throw error;
+  }
+}
+
+export async function downvoteQuestion(params: QuestionVoteParams){
+  try {
+    // connecting to database
+    connectToDatabase();
+
+    const {questionId, userId, hasAlreadyUpvoted, hasAlreadyDownvoted, path} = params;
+
+    let updateQuery = {};
+
+    if (hasAlreadyDownvoted) {
+      updateQuery = { $pull: { downvotes: userId } }
+    } else if (hasAlreadyUpvoted) {
+      updateQuery = {
+        $pull: { upvotes: userId },
+        $push: { downvotes: userId }
+      }
+    } else {
+      updateQuery = { $addToSet: { downvotes: userId } }
+    }
+
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, { new: true });
+    if (!question) {
+      throw new Error('Question not found')
+    }
+
+    // decrement author's reputation by -score
+
+    revalidatePath(path)
+
+  } catch (error) {
+    console.log('---------------------------')
+    console.log("DOWNVOTE___OPERATION___FAILED")
+    console.log('---------------------------')
     throw error;
   }
 }
