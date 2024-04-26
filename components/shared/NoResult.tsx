@@ -11,7 +11,7 @@ interface Props{
 
 export default function NoResult({title, description, link, linkTitle}: Props) {
   return (
-    <div className="mt-10 flex w-full flex-col items-center justify-center">
+    <div className="mt-5 flex w-full flex-col items-center justify-center">
       <Image
         src="/assets/images/light-illustration.png"
         alt="l-illustration"
