@@ -3,6 +3,7 @@
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
 import {
   downvoteQuestion,
+  toggleSaveQuestions,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
 import { formatAndDivideNumber } from "@/lib/utils";
@@ -32,9 +33,17 @@ export default function Votes({
 }: Props) {
   const pathname = usePathname();
 
-  function handleSave() {}
+  async function handleSave() {
+    await toggleSaveQuestions({
+      userId: JSON.parse(userId),
+      questionId: JSON.parse(itemId),
+      path: pathname
+    })
+  }
+
+
   async function handleVote(action: string) {
-    // the user not logged in
+    // redirect the user to sign-in not logged in
     if (!userId) {
       redirect("/sign-in");
     }
