@@ -53,7 +53,7 @@ export default async function Home() {
         ) : (
           <NoResult
             title="There's no question saved in the collection"
-            description="You haven't added any questions to your collection yet. Visit the homepage to browse through existing questions and save the important ones to your collection by clicking on the star icon."
+            description="You haven't added any questions to your collection yet. Start exploring and save question that pique your interest. Click on the star icon."
             link="/"
             linkTitle="Let's Go"
           />

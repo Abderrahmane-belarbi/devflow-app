@@ -1,6 +1,7 @@
 "use client";
 
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 import {
   downvoteQuestion,
   toggleSaveQuestions,
@@ -8,7 +9,8 @@ import {
 } from "@/lib/actions/question.action";
 import { formatAndDivideNumber } from "@/lib/utils";
 import Image from "next/image";
-import { redirect, usePathname } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface Props {
   type: string;
@@ -31,7 +33,9 @@ export default function Votes({
   hasAlreadyDownvoted,
   hasSaved,
 }: Props) {
+  
   const pathname = usePathname();
+  const router = useRouter();
 
   async function handleSave() {
     await toggleSaveQuestions({
@@ -40,7 +44,6 @@ export default function Votes({
       path: pathname
     })
   }
-
 
   async function handleVote(action: string) {
     // redirect the user to sign-in not logged in
@@ -91,6 +94,13 @@ export default function Votes({
       return;
     }
   }
+
+  useEffect(() => {
+    viewQuestion({
+      questionId: JSON.parse(itemId),
+      userId: userId ? JSON.parse(userId) : undefined
+    });
+  }, [ itemId, userId, pathname, router ])
 
   return (
     <div className="flex gap-5">
