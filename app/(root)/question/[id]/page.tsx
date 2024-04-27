@@ -3,6 +3,7 @@ import AnswerForm from "@/components/forms/AnswerForm";
 import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import RenderTag from "@/components/shared/RenderTag";
+import SignInToAnswer from "@/components/shared/SignInToAnswer";
 import Votes from "@/components/shared/Votes";
 import getAnswers from "@/lib/actions/answer.action";
 import { getQuestionById } from "@/lib/actions/question.action";
@@ -112,6 +113,12 @@ export default async function Page({ params, searchParams }: any) {
         question={result.content}
         questionId={JSON.stringify(result._id)}
         authorId={JSON.stringify(mongoUser?._id)}
+        userId={clerkId!}
+      />
+
+      <SignInToAnswer
+        questionId={JSON.stringify(result._id)}
+        userId={clerkId!}
       />
     </>
   );
