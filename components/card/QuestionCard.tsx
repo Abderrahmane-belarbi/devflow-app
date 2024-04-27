@@ -5,6 +5,7 @@ import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 
 interface Props {
   _id: number;
+  clerkId?: string | null;
   title: string;
   tags?: {
     _id: string;
@@ -23,13 +24,14 @@ interface Props {
 
 export default function QuestionCard({
   _id,
+  clerkId,
   title,
   tags,
   author,
   upvotes,
   views,
   answers,
-  createdAt,
+  createdAt
 }: Props) {
   return (
     <div className="card-wrapper p-9 sm:px-11 rounded-[10px]">

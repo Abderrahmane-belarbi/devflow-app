@@ -101,7 +101,11 @@ export default async function Page({ params, searchParams }: URLProps) {
           </TabsList>
 
           <TabsContent value="top-posts">
-          <QuestionsTab />
+          <QuestionsTab
+            searchParams={searchParams}
+            userId={userInfo?.user._id}
+            clerkId={clerkId}
+          />
           </TabsContent>
 
           <TabsContent value="answers">
