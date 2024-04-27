@@ -100,7 +100,7 @@ export default async function Page({ params, searchParams }: URLProps) {
 
           </TabsList>
 
-          <TabsContent value="top-posts">
+          <TabsContent value="top-posts" className="flex w-full flex-col gap-6">
           <QuestionsTab
             searchParams={searchParams}
             userId={userInfo?.user._id}
@@ -108,8 +108,12 @@ export default async function Page({ params, searchParams }: URLProps) {
           />
           </TabsContent>
 
-          <TabsContent value="answers">
-          <AnswersTab />
+          <TabsContent value="answers" className="flex w-full flex-col gap-6">
+          <AnswersTab
+            searchParams={searchParams}
+            userId={userInfo?.user._id}
+            clerkId={clerkId}
+          />
           </TabsContent>
 
         </Tabs>
