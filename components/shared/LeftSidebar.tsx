@@ -1,25 +1,39 @@
 "use client";
 
 import { sidebarLinks } from "@/constants";
-import { SignedOut } from "@clerk/nextjs";
+import { SignedOut, auth, useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 
 export default function LeftSidebar() {
   const pathname = usePathname();
+  const user = useAuth();
+  console.log(user);
+
   return (
-    <section className="background-light900_dark200
+    <section
+      className="background-light900_dark200
       light-border sticky left-0 top-0 flex h-screen
       flex-col justify-between overflow-y-auto border-r
       p-6 pt-36 shadow-light-300 dark:shadow-none
-      max-sm:hidden lg:w-[266px] custom-scrollbar">
+      max-sm:hidden lg:w-[266px] custom-scrollbar"
+    >
       <div className="flex flex-1 flex-col gap-3">
         {sidebarLinks.map((item) => {
           const isActive =
             (pathname.includes(item.route) && item.route.length > 1) ||
             pathname === item.route;
+
+          if(item.route === '/profile') {
+            if(user.userId) {
+              item.route = `${item.route}/${user.userId}`
+            } else {
+              return null;
+            }
+          }
+
           return (
             <Link
               key={item.route}
@@ -73,7 +87,9 @@ export default function LeftSidebar() {
                 height={20}
                 className="invert-colors lg:hidden"
               />
-              <span className="text-dark400_light900 max-lg:hidden">Sign Up</span>
+              <span className="text-dark400_light900 max-lg:hidden">
+                Sign Up
+              </span>
             </Button>
           </Link>
         </div>
