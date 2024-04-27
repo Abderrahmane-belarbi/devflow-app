@@ -30,7 +30,7 @@ export async function viewQuestion(params: ViewQuestionParams) {
       })
     }
 
-    if (!existingInteration) {
+    if (!existingInteration && userId) {
       // update viwe count for question
       await Question.findByIdAndUpdate(questionId, { $inc: { views: 1 } }) // increment by 1
     }
