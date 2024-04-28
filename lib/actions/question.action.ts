@@ -27,7 +27,6 @@ export async function createQuestion(params: CreateQuestionParams) {
       author,
     });
 
-    console.log("QUESTION CREATED... | TITLE:", title);
     const tagDocuments = [];
     // create a tags or get them if they already exist
     for (const tag of tags) {
@@ -58,6 +57,7 @@ export async function getQuestions(params: GetQuestionsParams) {
       .populate({ path: "author", model: User })
       .sort({ createdAt: -1 }); // sorting from the new to old base on the time | 1 measn from old to new
     console.log(`THE SERVER GET'S ${questions.length} QUESTION/s`);
+    
     return { questions };
   } catch (error) {
     console.log("---------------------------------------------");

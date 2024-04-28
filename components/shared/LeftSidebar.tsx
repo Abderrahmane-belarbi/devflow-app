@@ -10,7 +10,6 @@ import { Button } from "../ui/button";
 export default function LeftSidebar() {
   const pathname = usePathname();
   const user = useAuth();
-  console.log(user);
 
   return (
     <section
