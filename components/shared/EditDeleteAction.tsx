@@ -29,13 +29,13 @@ export default function EditDeleteAction({ type, itemId }: Props) {
   }
 
   return (
-    <div className="flex items-center justify-end gap-3 max-sm:w-full">
+    <div className="flex items-center justify-end gap-6 max-sm:w-full">
       {type === "question" && (
         <Image
           src="/assets/icons/edit.svg"
           alt="edit"
-          width={14}
-          height={14}
+          width={20}
+          height={20}
           className="cursor-pointer object-contain"
           onClick={handleEdit}
         />
@@ -43,8 +43,8 @@ export default function EditDeleteAction({ type, itemId }: Props) {
       <Image
         src="/assets/icons/trash.svg"
         alt="delete"
-        width={14}
-        height={14}
+        width={20}
+        height={20}
         className="cursor-pointer object-contain"
         onClick={handleDelete}
       />
