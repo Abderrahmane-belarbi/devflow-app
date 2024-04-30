@@ -5,6 +5,8 @@ import { connectToDatabase } from "../mongoose";
 import Tag from "@/database/tag.model";
 import {
   CreateQuestionParams,
+  DeleteQuestionParams,
+  EditQuestionParams,
   GetQuestionByIdParams,
   GetQuestionsParams,
   QuestionVoteParams,
@@ -12,6 +14,8 @@ import {
 } from "./shared.types";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
+import Answer from "@/database/answer.model";
+import Interaction from "@/database/interaction.model";
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {
@@ -201,6 +205,48 @@ export async function toggleSaveQuestions(params: ToggleSaveQuestionParams) {
     console.log("----------------------------------------------------------");
     console.log("ADDING___QUESTION___TO___COLLECTION___OPPERATION___FALIED.");
     console.log("----------------------------------------------------------");
+    throw error;
+  }
+}
+
+export async function deleteQuestion(params: DeleteQuestionParams) {
+
+  try {
+    connectToDatabase();
+    
+    const { questionId, path } = params;
+    await Question.deleteOne({ _id: questionId });
+    await Answer.deleteMany({ question: questionId });
+    await Interaction.deleteMany({ question: questionId });
+    await Tag.updateMany({ question: questionId }, { $pull: { question: questionId } });
+
+    revalidatePath(path);
+
+  } catch (error) {
+    console.log("----------------------------------");
+    console.log('DELETING_QUESTION_OPERATION_FAILED');
+    console.log("----------------------------------");
+  }
+}
+
+export async function editQuestion(params: EditQuestionParams) {
+  try {
+    await connectToDatabase();
+
+    const { questionId, title, content, path} = params;
+    const question = await Question.findById(questionId)
+      .populate("tags")
+
+      if (!question) {
+        throw new Error('Question not found')
+      }
+      question.title = title;
+      question.content = content;
+      await question.save();
+    } catch (error) {
+    console.log("----------------------------------");
+    console.log("EDITING_QUESTION_OPERATION_FAILED.");
+    console.log("----------------------------------");
     throw error;
   }
 }

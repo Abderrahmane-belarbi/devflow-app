@@ -20,51 +20,84 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useTheme } from "@/context/ThemeProvider";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useRouter, usePathname } from "next/navigation";
 
 interface Props {
+  type?: string;
+  questionDetails?: string;
   mongoUserId: string;
 }
 
-export default function QuestionForm({ mongoUserId }: Props) {
+export default function QuestionForm({
+  mongoUserId,
+  type,
+  questionDetails,
+}: Props) {
   const router = useRouter();
   const pathname = usePathname();
 
+  let parsedQuestionDetails: any;
+  if (questionDetails && questionDetails.trim() !== "") {
+    parsedQuestionDetails = JSON.parse(questionDetails);
+  } else {
+    parsedQuestionDetails = {
+      _id: null,
+      title: null,
+      explanation: null,
+      tags: null,
+    };
+  }
+  //const parsedQuestionDetails = JSON.parse(questionDetails || '');
+  const groupedTags = parsedQuestionDetails?.tags?.map((tag: any) => tag.name);
+
   const editorRef = useRef(null);
   const { mode } = useTheme();
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(groupedTags || []);
+  const [titleError, setTitleError] = useState("");
+  const [contentError, setContentError] = useState("");
   const [tagError, setTagError] = useState("");
   const form = useForm<z.infer<typeof questionSchema>>({
     resolver: zodResolver(questionSchema),
     defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
+      title: parsedQuestionDetails.title || "",
+      explanation: parsedQuestionDetails.content || "",
+      tags: groupedTags || [], // im working with setTags not this line
     },
   });
-  const type: any = "post";
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function onSubmit(values: z.infer<typeof questionSchema>) {
+
     if (tags.length < 1) {
       setTagError("Add one tag at least");
-    } else if (values.title.length > 5 && values.explanation.length > 10) {
+    } else if (values.title.length < 5 ) {
+      setTitleError("The Title should be at least 5 characters");
+    } else if (values.explanation.length < 10) {
+      setContentError("The Question details should be at least 10 characters");
+    } else {
       setIsSubmitting(true);
-
       try {
-        // making a async call to api for create a question
-        await createQuestion({
-          title: values.title,
-          content: values.explanation,
-          tags: tags,
-          author: JSON.parse(mongoUserId),
-          path: pathname
-        });
-        // contain all form data
-
-        // navigate to home
-        router.push("/");
+        if (type === "edit") {
+          await editQuestion({
+            questionId: parsedQuestionDetails._id,
+            title: values.title,
+            content: values.explanation,
+            path: pathname,
+          });
+          router.push(`/question/${parsedQuestionDetails._id}`);
+        } else {
+          await createQuestion({
+            title: values.title,
+            content: values.explanation,
+            tags: tags,
+            author: JSON.parse(mongoUserId),
+            path: pathname,
+          });
+          // navigate to home
+          router.push("/");
+        }
       } catch (error) {
         console.log("Creating question failed..");
       } finally {
@@ -100,7 +133,7 @@ export default function QuestionForm({ mongoUserId }: Props) {
 
   function handleOnDeleteTag(wantedToDeleteTag: string) {
     const tempTags = tags;
-    tags.map((currentTag) => {
+    tags.map((currentTag: any) => {
       if (currentTag === wantedToDeleteTag) {
         const index = tags.indexOf(currentTag);
         tempTags.splice(index, 1);
@@ -156,7 +189,7 @@ export default function QuestionForm({ mongoUserId }: Props) {
                   apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                   // @ts-ignore
                   onInit={(evt, editor) => (editorRef.current = editor)}
-                  initialValue=""
+                  initialValue={parsedQuestionDetails.content || ""}
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
                   init={{
@@ -204,25 +237,29 @@ export default function QuestionForm({ mongoUserId }: Props) {
           <input
             type="text"
             placeholder="Add tag..."
+            disabled={type === "edit"}
             onKeyDown={(e) => handleInputKeyDown(e)}
-            className="p-2 outline-none no-focus paragraph-regular background-light900_dark300 text-dark300_light700 light-border-2 min-h-[56px] border"
+            className={`${type === 'edit' ? 'cursor-not-allowed' : ''} p-2 outline-none no-focus paragraph-regular background-light900_dark300 text-dark300_light700 light-border-2 min-h-[56px] border`}
           />
           <p className="font-medium text-[0.8rem] text-red-500">{tagError}</p>
           <div className="flex  gap-4">
-            {tags.map((tag) => (
+            {tags.map((tag: any) => (
               <Badge
                 key={tag}
                 className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize"
               >
                 {tag}
-                <Image
-                  className="cursor-pointer object-contain invert-0 dark:invert"
-                  src="assets/icons/close.svg"
-                  alt="delete-icon"
-                  onClick={() => handleOnDeleteTag(tag)}
-                  width={12}
-                  height={12}
-                />
+                {type !== 'edit' &&
+                (
+                  <Image
+                    className="cursor-pointer object-contain invert-0 dark:invert"
+                    src="assets/icons/close.svg"
+                    alt="delete-icon"
+                    onClick={() => handleOnDeleteTag(tag)}
+                    width={12}
+                    height={12}
+                  />
+                )}
               </Badge>
             ))}
           </div>

@@ -2,20 +2,22 @@ import Link from "next/link";
 import RenderTag from "../shared/RenderTag";
 import Metric from "../shared/Metric";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import { SignedIn } from "@clerk/nextjs";
+import EditDeleteAction from "../shared/EditDeleteAction";
 
 interface Props {
-  _id: number;
+  _id: string;
   title: string;
   tags?: {
     _id: string;
     name: string;
   }[];
   author: {
-    _id: number;
+    _id: string;
     name: string;
     picture: string;
   };
-  href: string;
+  clerkId: string;
   upvotes: number;
   views: number;
   answers: Array<object>;
@@ -27,12 +29,14 @@ export default function QuestionCard({
   title,
   tags,
   author,
-  href,
+  clerkId,
   upvotes,
   views,
   answers,
   createdAt,
 }: Props) {
+
+  const showActionButton = clerkId && clerkId === author.clerkId;
 
   return (
     <div className="card-wrapper p-9 sm:px-11 rounded-[10px]">
@@ -47,7 +51,18 @@ export default function QuestionCard({
             </h3>
           </Link>
         </div>
+
         {/* if signed in add edit delete actions */}
+        <SignedIn>
+          {showActionButton && (
+            <EditDeleteAction
+              type="question"
+              itemId={JSON.stringify(_id)}
+
+            />
+          )}
+        </SignedIn>
+
       </div>
 
       {/* RENDERING TAGS */}
@@ -66,7 +81,7 @@ export default function QuestionCard({
           alt="user"
           value={author.name}
           title={` • asked ${getTimestamp(createdAt)}`}
-          href={`/profile/${href}`}
+          href={`/profile/${clerkId}`}
           isAuthor
           textStyle="body-medium text-dark400_light700"
         />
