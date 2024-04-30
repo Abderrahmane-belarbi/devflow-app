@@ -18,7 +18,7 @@ interface Props {
     picture: string;
     clerkId: string;
   };
-  clerkId: string;
+  clerkId?: string;
   upvotes: number;
   views: number;
   answers: Array<object>;
@@ -36,7 +36,7 @@ export default function QuestionCard({
   answers,
   createdAt,
 }: Props) {
-
+  
   const showActionButton = clerkId && clerkId === author.clerkId;
 
   return (
@@ -82,7 +82,7 @@ export default function QuestionCard({
           alt="user"
           value={author.name}
           title={` • asked ${getTimestamp(createdAt)}`}
-          href={`/profile/${clerkId}`}
+          href={`/profile/${author.clerkId}`}
           isAuthor
           textStyle="body-medium text-dark400_light700"
         />
