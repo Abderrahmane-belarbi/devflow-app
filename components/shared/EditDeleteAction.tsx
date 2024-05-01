@@ -9,11 +9,11 @@ interface Props {
   type: string;
   itemId: string;
 }
-
 export default function EditDeleteAction({ type, itemId }: Props) {
   const pathname = usePathname();
   const router = useRouter();
-
+  
+  console.log('itemId: ',itemId)
   async function handleEdit() {
     router.push(`/question/edit/${JSON.parse(itemId)}`)
   }
