@@ -84,3 +84,22 @@ export async function getQuestionByTagId(params: GetQuestionsByTagIdParams) {
     throw error;
   }
 }
+
+export async function getTopPopularTags() {
+  try {
+    connectToDatabase();
+
+    const popularTags = await Tag.aggregate([
+      { $project: { name: 1, numberOfQuestions: { $size: "$questions" }}},
+      { $sort: { numberOfQuestions: -1 }},
+      { $limit: 5 }
+    ])
+      .sort({ views: -1, upvotes: -1 })
+      .limit(5);
+
+    return popularTags;
+  } catch (error) {
+    console.log("COULD'T GET HOT QUESTION");
+    throw error;
+  }
+}

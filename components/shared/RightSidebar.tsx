@@ -2,10 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import RenderTag from "./RenderTag";
 import { getHotQuestion } from "@/lib/actions/question.action";
+import { getTopPopularTags } from "@/lib/actions/tag.action";
 
 export default async function RightSidebar() {
   const hotQestions = await getHotQuestion();
-
+  const popularTags = await getTopPopularTags();
   return (
     <section
       className="background-light900_dark200
@@ -39,9 +40,9 @@ export default async function RightSidebar() {
       <div className="mt-16">
         <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
         <div className="mt-7 flex flex-col gap-4">
-          {/* {popularTags.map((tag) => (
+          {popularTags.map((tag) => (
             <RenderTag key={tag._id} _id={tag._id} name={tag.name} totalQuestions={tag.totalQuestions} showCount/>
-          ))} */}
+          ))}
         </div>
       </div>
     </section>
