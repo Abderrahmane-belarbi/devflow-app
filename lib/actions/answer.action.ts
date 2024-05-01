@@ -111,7 +111,7 @@ export async function downvoteAnswer(params: AnswerVoteParams){
 
     const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, { new: true });
     if (!answer) {
-      throw new Error('Anser not found')
+      throw new Error('Answer_Not_Found')
     }
 
     // decrement author's reputation by -score
@@ -133,16 +133,20 @@ export async function deleteAnswer(params: DeleteAnswerParams) {
     
     const { answerId, path } = params;
 
-    const answer =  await Answer.findById({ answerId });
+    const answer =  await Answer.findOne({ _id: answerId });
     if(!answer) {
       throw new Error('Answer_Not_Found');
     }
+    await answer.deleteOne({ _id: answerId });
     await Question.updateMany({ _id: answer.question }, { $pull: { answers: answerId } });
-    await Interaction.deleteMany({ answer: answerId });
+    // for know i didnt add answers upvotes and downvotes in Inetaction so we cant delete them for now
+    //await Interaction.deleteMany({ answer: answerId });
 
     revalidatePath(path);
 
   } catch (error) {
-    console.log('DELETING_QUESTION_OPERATION_FAILED');
+    console.clear()
+    console.log('DELETING_ANSWER_OPERATION_FAILED');
+    console.log(error)
   }
 }

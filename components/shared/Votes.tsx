@@ -98,9 +98,9 @@ export default function Votes({
   useEffect(() => {
     viewQuestion({
       questionId: JSON.parse(itemId),
-      userId: userId ? JSON.parse(userId) : undefined
-    });
-  }, [ itemId, userId, pathname, router ])
+      userId: userId ? JSON.parse(userId) : undefined,
+    })
+  }, [itemId, userId, pathname, router]);
 
   return (
     <div className="flex gap-5">

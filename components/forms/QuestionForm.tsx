@@ -36,7 +36,6 @@ export default function QuestionForm({
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
-
   let parsedQuestionDetails: any;
   if (questionDetails && questionDetails.trim() !== "") {
     parsedQuestionDetails = JSON.parse(questionDetails);
@@ -72,11 +71,7 @@ export default function QuestionForm({
 
     if (tags.length < 1) {
       setTagError("Add one tag at least");
-    } else if (values.title.length < 5 ) {
-      setTitleError("The Title should be at least 5 characters");
-    } else if (values.explanation.length < 10) {
-      setContentError("The Question details should be at least 10 characters");
-    } else {
+    } else if (values.title.length > 5 && values.explanation.length > 10 ) {
       setIsSubmitting(true);
       try {
         if (type === "edit") {
@@ -99,7 +94,7 @@ export default function QuestionForm({
           router.push("/");
         }
       } catch (error) {
-        console.log("Creating question failed..");
+        console.log(error);
       } finally {
         setIsSubmitting(false);
       }

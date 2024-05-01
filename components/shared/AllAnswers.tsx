@@ -65,7 +65,7 @@ export default async function AllAnswers({
                 <div className="flex justify-end">
                 <Votes
                   type="answer"
-                  itemId={JSON.stringify(answer._id)}
+                  itemId={JSON.stringify(questionId)}
                   userId={JSON.stringify(userId)}
                   upvotes={answer.upvotes.length}
                   hasAlreadyUpvoted={answer.upvotes.includes(userId)}

@@ -49,6 +49,7 @@ export async function createQuestion(params: CreateQuestionParams) {
     });
   } catch (error) {
     console.log("----------- QUESTION NOT CREATED ----------");
+    throw error;
   }
 }
 
@@ -215,11 +216,12 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
     connectToDatabase();
     
     const { questionId, path } = params;
+
     await Question.deleteOne({ _id: questionId });
     await Answer.deleteMany({ question: questionId });
-    await Interaction.deleteMany({ question: questionId });
-    await Tag.updateMany({ question: questionId }, { $pull: { question: questionId } });
-
+    await Interaction.deleteOne({ question: questionId });    
+    await Tag.updateMany({ questions: questionId }, { $pull: { questions: questionId } });
+    // TODO: see if that is more question using this tag if that is not delete the whole tag,
     revalidatePath(path);
 
   } catch (error) {
